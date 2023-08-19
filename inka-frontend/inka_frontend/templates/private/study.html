@@ -1,0 +1,37 @@
+{% extends "public/base.html" %}
+
+{% block style%}
+<link href="/static/css/private-base.css" rel="stylesheet">
+<link href="/static/css/study.css" rel="stylesheet">
+{% endblock %}
+
+
+{% block body %}
+<main class="wrapper">
+  <nav>
+
+    <div class="homepage-link">
+      <a href="{{ url_for('home_page') }}">
+        <i class="fas fa-fish"></i>
+      </a>
+      <h1>{{ navbar_title }}</h1>
+    </div>
+
+    <div class="navbar-buttons">
+      <a href="{{ url_for('home_page') }}"><i class="fa fa-sign-out-alt" style="transform: rotate(180deg);"></i></a>
+    </div>
+
+  </nav>
+
+  <div id="stretched">
+    <div hx-get="{{ url_for('study_component', deck_id=deck_id) }}" hx-trigger="load" hx-swap="outerHTML">
+        {% include "components/loading.html" %}
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; Ebisu Flashcards 2022 - {{ this_year }}. Made with FastAPI and HTMX.</p>
+  </footer>
+
+</main>
+{% endblock %}

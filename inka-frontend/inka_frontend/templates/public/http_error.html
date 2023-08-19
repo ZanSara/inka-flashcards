@@ -1,0 +1,33 @@
+{% extends "public/base.html" %}
+
+
+{% block style%}
+<link href="/static/css/login.css" rel="stylesheet">
+{% endblock %}
+
+
+
+{% block body %}
+<body class="small">
+
+
+<div class="home-link">
+  <a href="{{ url_for('home_page') }}">
+    <i class="fas fa-fish"></i>
+  </a>
+</div>
+
+
+<main class="wrapper">
+
+  <h1>{{ code }}</h1>
+  <p>{{ message }}</p>
+
+  <footer>
+    <a href="{{ url_for('home_page') }}">Go back</a>
+  </footer>
+
+</main>
+
+</body>
+{% endblock %}

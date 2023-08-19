@@ -1,0 +1,62 @@
+{% extends "private/base.html" %}
+
+
+{% block css%}
+<link href="/static/css/deck-details.css" rel="stylesheet">
+<link href="/static/css/modal.css" rel="stylesheet">
+{% endblock %}
+
+
+{% block page %}
+
+<section id="single-card">
+    <div class="box main-card">
+        <div>
+            <h1>{{ schema.name }}</h1>
+            <p>{{ schema.description }}</p>
+
+            {% for card, card_data in schema.cards.items() %}
+
+            <div class="box">
+                <div style="margin: 1rem;">
+                    <h3>{{ card }}</h3>
+
+                    <div style="display: flex; flex-direction: column;">
+                        <p>Question</p>
+                        <div style="background-color:#eee; padding: 0.5rem; border-radius: 0.5rem;">
+                            <div class="cards__{{ card }}__sides__question-preview">{{ card_data.question|safe }}</div>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; flex-direction: column;">
+                        <p>Answer</p>
+                        <div style="background-color:#eee; padding: 0.5rem; border-radius: 0.5rem;">
+                            <div class="cards__{{ card }}__sides__answer-preview">{{ card_data.answer|safe }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+
+            <h3>Preview</h3>
+            <div style="display: flex; flex-direction: column;">
+                <div style="background-color:#eee; padding: 0.5rem; border-radius: 0.5rem;">
+                    <div class="cards__{{ card }}__preview-preview">{{ schema.preview|safe }}</div>
+                </div>
+            </div>
+
+            <h3>Form</h3>
+            <div style="background-color:#eee; padding: 1rem; border-radius: 0.5rem; ">
+                <div class="form-preview" style="display: flex; flex-direction: column; gap: 0.5rem;">{{ schema.form|safe }}</div>
+            </div>
+
+            <div class="buttons" style="margin-top: 1rem;">
+                <a href="{{ url_for('clone_schema_page', schema_id=schema_id) }}" class="positive">Clone</button>
+                <a href="{{ url_for('schemas_page') }}" class="neutral">Back</a>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+{% endblock %}

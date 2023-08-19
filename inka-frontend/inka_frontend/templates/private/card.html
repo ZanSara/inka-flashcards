@@ -1,0 +1,82 @@
+{% extends "private/base.html" %}
+
+
+{% block css%}
+<link href="/static/css/modal.css" rel="stylesheet">
+{% endblock %}
+
+{% block page %}
+<script>
+    function toggleFields(name){
+        var name = document.querySelector("select#schema").value;
+        var schemas = document.querySelectorAll('[id^="schema-"]');
+        for (var i = 0; i < schemas.length; i++) {
+            schemas[i].style.display = "none";
+            // Reset and disable all fields
+            var fields = schemas[i].querySelectorAll('input, textarea, select');
+                for (var j = 0; j < fields.length; j++) {
+                    fields[j].disabled = "disabled";
+                }
+        }
+        // Enable selected ones
+        if (name){
+            var schema_block = document.getElementById("schema-" + name)
+            schema_block.style.display = "flex";
+            var fields = schema_block.querySelectorAll('input, textarea, select');
+            for (var j = 0; j < fields.length; j++) {
+                fields[j].disabled = "";
+            }
+        }
+    }
+</script>
+
+<section id="single-card">
+
+    <form action="{{ url_for('save_card_endpoint', deck_id=deck_id, card_id=card_id) }}" method="post">
+        <div class="main-card box">
+            <div>
+                <div>
+                    <label for="schema">Schema:</label>
+                    <select id="schema" name="schema" onchange="toggleFields()">
+                        <option value="" {% if not card.schema %}selected{% endif %}></option>
+                        {% for schema_id, schema in card_schemas.items() %}
+                        <option
+                            value="{{ schema_id }}"
+                            {% if card.schema == schema_id %}selected{% endif %}
+                        >
+                            {{ schema.name }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                {% for id, schema in card_schemas.items() %}
+                <div id="schema-{{ id }}" style="display: none; flex-direction: column; gap: 1rem;">
+                    {{ schema.rendered_form|safe }}
+                </div>
+                {% endfor %}
+
+                <label for="tags">Tags:</label>
+                <input type='text' name='tags' value="{{ card.tags|join(', ') }}"></input>
+
+                <div class="buttons">
+                    <button type="submit" class="positive">Save</button>
+                    <a href="{{ url_for('cards_page', deck_id=deck_id) }}" class="neutral">Cancel</a>
+                    {% if card_id %}
+                        <button type="button" class="negative"
+                            hx-get="{{ url_for('card_confirm_delete_component', deck_id=deck_id, card_id=card_id) }}"
+                            hx-target="body" hx-swap="beforeend">
+                            Delete
+                        </button>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </form>
+    <script>
+        toggleFields()
+    </script>
+
+</section>
+
+{% endblock %}

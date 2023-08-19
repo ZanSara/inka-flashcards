@@ -1,0 +1,21 @@
+{% extends "private/base.html" %}
+
+
+{% block css%}
+{% endblock %}
+
+{% block page %}
+<section id="single-card">
+    <div class="box main-card">
+        <div>
+            <h3>Schemas</h3>
+            <a href="{{ url_for('schemas_page') }}">Manage Schemas</a>
+
+            <h3>Account</h3>
+            <a class="logout" href="{{ url_for('logout_page') }}">Logout</a>
+            <a href="#">Change Password</a>
+            <a class="danger" href="#">Delete Account</a>
+        </div>
+    </div>
+</section>
+{% endblock %}
