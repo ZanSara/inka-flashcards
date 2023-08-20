@@ -15,7 +15,7 @@ async def get_card_to_study(deck_id: str):
             raise HTTPException(status_code=404, detail="Deck not found")
 
         if not len(deck["cards"]):
-            return JSONResponse(card_id=None, deck_id=deck_id)
+            return {"card_id": None, "deck_id": deck_id}
 
         algorithm = ALGORITHMS[deck["algorithm"]]
         card_id, card_type, question, answer = algorithm.next_card(deck, db["schemas"])
@@ -33,7 +33,7 @@ async def get_card_to_study(deck_id: str):
 
 
 @router.post(
-    "study/{deck_id}/{card_id}/{card_type}/{result}",
+    "/study/{deck_id}/{card_id}/{card_type}/{result}",
     response_class=JSONResponse,
 )
 async def create_review(

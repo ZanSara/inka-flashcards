@@ -51,6 +51,7 @@
             </div>
 
             <div class="buttons" style="margin-top: 1rem;">
+                <a href="{{ url_for('edit_schema_page', schema_id=schema_id) }}" class="positive">Edit</button>
                 <a href="{{ url_for('clone_schema_page', schema_id=schema_id) }}" class="positive">Clone</button>
                 <a href="{{ url_for('schemas_page') }}" class="neutral">Back</a>
             </div>

@@ -3,6 +3,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any
 
+import requests
 from fastapi import Depends, FastAPI, Request
 from fastapi.exceptions import HTTPException, StarletteHTTPException
 from fastapi.responses import HTMLResponse
@@ -58,6 +59,15 @@ async def http_exception_handler(request: Request, exc: HTTPException):
         request=request, code=exc.status_code, message=exc.detail
     )
     return HTMLResponse(response, status_code=exc.status_code)
+
+
+@app.exception_handler(requests.HTTPError)
+async def requests_http_error_handler(request: Request, exc: requests.HTTPError):
+    template = get_jinja2().get_template("public/http_error.html")
+    response = template.render(
+        request=request, code=exc.response.status_code, message=exc
+    )
+    return HTMLResponse(response, status_code=exc.response.status_code)
 
 
 from inka_frontend.api.cards import router as cards_router  # noqa: E402

@@ -3,7 +3,6 @@ import shelve
 from copy import deepcopy
 from hashlib import md5
 from pathlib import Path
-from typing import Optional
 
 from fastapi import APIRouter, HTTPException, Request, UploadFile
 from fastapi.responses import JSONResponse, FileResponse
@@ -67,24 +66,36 @@ async def export_deck(request: Request):
     )
 
 
-@router.post("/decks/{deck_id}", response_class=JSONResponse)
-async def save_deck(request: Request, deck_id: Optional[str] = None):
-    async with request.form() as form:
-        with shelve.open(database) as db:
-            if not deck_id:
-                deck_id = md5(form["name"].encode()).hexdigest()
-                if deck_id in db["decks"]:
-                    raise HTTPException(
-                        status_code=409, detail="Deck with this name already exists"
-                    )
+@router.post("/decks/new", response_class=JSONResponse)
+async def create_deck(request: Request):
+    form = await request.json()
+    with shelve.open(database) as db:
+        deck_id = md5(form["name"].encode()).hexdigest()
+        if deck_id in db["decks"]:
+            raise HTTPException(
+                status_code=409, detail="Deck with this name already exists"
+            )
+        db["decks"][deck_id] = {
+            **db["decks"].get(deck_id, {"cards": {}}),
+            "name": form["name"],
+            "description": form["description"],
+            "tags": [tag.strip() for tag in form["tags"].split(",") if tag.strip()],
+            "algorithm": form["algorithm"],
+        }
+    return {"deck_id": deck_id}
 
-            db["decks"][deck_id] = {
-                **db["decks"].get(deck_id, {"cards": {}}),
-                "name": form["name"],
-                "description": form["description"],
-                "tags": [tag.strip() for tag in form["tags"].split(",") if tag.strip()],
-                "algorithm": form["algorithm"],
-            }
+
+@router.post("/decks/{deck_id}", response_class=JSONResponse)
+async def save_deck(request: Request, deck_id: str):
+    form = await request.json()
+    with shelve.open(database) as db:
+        db["decks"][deck_id] = {
+            **db["decks"].get(deck_id, {"cards": {}}),
+            "name": form["name"],
+            "description": form["description"],
+            "tags": [tag.strip() for tag in form["tags"].split(",") if tag.strip()],
+            "algorithm": form["algorithm"],
+        }
     return {"deck_id": deck_id}
 
 

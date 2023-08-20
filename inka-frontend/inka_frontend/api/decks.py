@@ -54,7 +54,6 @@ async def create_deck_page(render=Depends(template("private/deck.html"))):
         navbar_title="New Deck",
         deck={"name": "", "description": ""},
         algorithms=algorithms,
-        deck_id=None,
     )
 
 
@@ -105,11 +104,24 @@ async def edit_deck_page(deck_id: str, render=Depends(template("private/deck.htm
     )
 
 
-@router.post("/decks/{deck_id}", response_class=RedirectResponse)
-async def save_deck_endpoint(request: Request, deck_id: Optional[str] = None):
+@router.post("/decks/new", response_class=RedirectResponse)
+async def create_deck_endpoint(request: Request, deck_id: Optional[str] = None):
     async with request.form() as form:
         response = requests.post(
-            f"{API_SERVER_URL}/decks/{deck_id if deck_id is not None else ''}",
+            f"{API_SERVER_URL}/decks/new",
+            json=dict(form),
+        )
+        response.raise_for_status()
+    return RedirectResponse(
+        request.url_for("home_page"), status_code=status.HTTP_302_FOUND
+    )
+
+
+@router.post("/decks/{deck_id}", response_class=RedirectResponse)
+async def save_deck_endpoint(request: Request, deck_id: str):
+    async with request.form() as form:
+        response = requests.post(
+            f"{API_SERVER_URL}/decks/{deck_id}",
             json=dict(form),
         )
         response.raise_for_status()

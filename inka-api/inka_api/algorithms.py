@@ -63,6 +63,7 @@ class HardestFirst(Algorithm):
             (card_id, card_type, review_data or 0)
             for card_id, card_data in deck["cards"].items()
             for card_type, review_data in card_data["reviews"].items()
+            if card_type in schemas[card_data["schema"]]["cards"]
         ]
         reviewable_cards.sort(key=lambda x: x[2])
         threshold = reviewable_cards[0][2] + from_minimum
@@ -75,10 +76,9 @@ class HardestFirst(Algorithm):
         card_id, card_type, _ = random.choice(cards_to_pick_from)
         card_schema = schemas[deck["cards"][card_id]["schema"]]["cards"][card_type]
 
-        (
-            question_template,
-            answer_template,
-        ) = get_question_answer_from_schema(card_schema, deck["cards"][card_id])
+        question_template, answer_template = get_question_answer_from_schema(
+            card_schema, deck["cards"][card_id]
+        )
 
         question = Template(question_template).render(**deck["cards"][card_id])
         answer = Template(answer_template).render(**deck["cards"][card_id])
@@ -93,12 +93,9 @@ class HardestFirst(Algorithm):
         else:
             reviews = []
             for card_data in deck["cards"].values():
-                reviews += card_data.get("reviews", {}).values()
+                reviews += [review for review in card_data.get("reviews", {}).values() if review is not None]
             card_data["reviews"][card_type] = max(min(reviews or []) - 1, 0)
 
-        reviews = []
-        for card_data in deck["cards"].values():
-            reviews += card_data.get("reviews", {}).values()
 
 
 ALGORITHMS: Dict[str, Algorithm] = {

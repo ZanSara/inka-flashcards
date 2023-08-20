@@ -9,9 +9,16 @@
 
 {% block page %}
 <section id="single-card">
-    <form action="{{ url_for('save_schema_endpoint') }}" method="post">
+    <form action="
+        {% if editing_existing %}
+            {{ url_for('update_schema_endpoint', schema_id=schema_id) }}
+        {% else %}
+            {{ url_for('create_schema_endpoint') }}
+        {% endif %}
+        " method="post">
         <div class="box main-card">
             <div>
+                {% if editing_existing %}<h3>EDITING SCHEMAS MIGHT BREAK YOUR DECKS</h3>{% endif %}
                 <p>Always use """ for multiline strings.</p>
                 <textarea name="code" rows="20">{
 {% for key, value in schema.items() -%}
@@ -24,7 +31,7 @@
 }</textarea>
                 <div class="buttons" style="margin-top: 1rem;">
                     <button type="submit" class="positive">Save</button>
-                    <a href="{{ url_for('schemas_page') }}" class="neutral">Cancel</a>
+                    <a href="{{ url_for('view_schema_page', schema_id=old_schema_id) }}" class="neutral">Cancel</a>
                 </div>
             </div>
         </div>

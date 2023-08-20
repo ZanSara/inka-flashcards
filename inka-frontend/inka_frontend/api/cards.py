@@ -54,7 +54,7 @@ async def cards_component(
 
 @router.get("/decks/{deck_id}/cards/new", response_class=HTMLResponse)
 async def create_card_page(deck_id: str, render=Depends(template("private/card.html"))):
-    response = requests.get(f"{API_SERVER_URL}/deck/{deck_id}")
+    response = requests.get(f"{API_SERVER_URL}/decks/{deck_id}")
     response.raise_for_status()
     deck = response.json()
 
@@ -81,11 +81,11 @@ async def create_card_page(deck_id: str, render=Depends(template("private/card.h
 async def edit_card_page(
     deck_id: str, card_id: str, render=Depends(template("private/card.html"))
 ):
-    response = requests.get(f"{API_SERVER_URL}/deck/{deck_id}")
+    response = requests.get(f"{API_SERVER_URL}/decks/{deck_id}")
     response.raise_for_status()
     deck = response.json()
 
-    response = requests.get(f"{API_SERVER_URL}/deck/{deck_id}/cards/{card_id}")
+    response = requests.get(f"{API_SERVER_URL}/decks/{deck_id}/cards/{card_id}")
     response.raise_for_status()
     card = response.json()
 
@@ -94,7 +94,7 @@ async def edit_card_page(
     schemas = response.json()
 
     for schema in schemas.values():
-        schema["rendered_form"] = Template(schema["form"]).render()
+        schema["rendered_form"] = Template(schema["form"]).render(**card)
 
     return render(
         navbar_title=deck["name"],

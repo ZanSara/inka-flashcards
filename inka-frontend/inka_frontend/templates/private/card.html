@@ -40,10 +40,7 @@
                     <select id="schema" name="schema" onchange="toggleFields()">
                         <option value="" {% if not card.schema %}selected{% endif %}></option>
                         {% for schema_id, schema in card_schemas.items() %}
-                        <option
-                            value="{{ schema_id }}"
-                            {% if card.schema == schema_id %}selected{% endif %}
-                        >
+                        <option value="{{ schema_id }}" {% if card.schema == schema_id %}selected{% endif %}>
                             {{ schema.name }}
                         </option>
                         {% endfor %}

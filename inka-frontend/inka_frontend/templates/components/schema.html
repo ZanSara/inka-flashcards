@@ -2,11 +2,9 @@
     <div class="content">
         <div class="title">
             <h1>{{ schema.name }}</h1>
+            <p></p>
             <a class="dotted icon" href="{{ url_for('view_schema_page', schema_id=id) }}">
                 <i class="fas fa-search"></i>
-            </a>
-            <a class="dotted icon" href="{{ url_for('clone_schema_page', schema_id=id) }}">
-                <i class="fas fa-copy"></i>
             </a>
             <a
                 class="dotted icon negative"
