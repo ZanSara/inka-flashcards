@@ -1,21 +1,5 @@
 # ruff: noqa: B018
 
-{
-    "name": "PT 🇵🇹 to EN 🇬🇧 with reverse",
-    "description": "Generates two cards: 🇵🇹 -> 🇬🇧 and 🇬🇧 -> 🇵🇹 ",
-    "form": """
-            <label for='question'>PT 🇵🇹</label>
-            <input type='text' name='question' value='{{ question }}'>
-
-            <label for='answer'>EN 🇬🇧</label>
-            <input type='text' name='answer'  value='{{ answer }}'>
-    """,
-    "preview": "🇵🇹 {{ question }} <-> 🇬🇧 {{ answer }}",
-    "cards": {
-        "direct": {"question": "🇵🇹 {{ question }}", "answer": "{{ answer }} "},
-        "reverse": {"question": "🇬🇧 {{ answer }}", "answer": "{{ question }}"},
-    },
-}
 
 {
     "name": "PT 🇵🇹 to EN 🇬🇧 ",
@@ -29,7 +13,7 @@
     """,
     "preview": "🇵🇹 {{ question }} -> 🇬🇧 {{ answer }}",
     "cards": {
-        "card": {"question": "🇵🇹 {{ question }}", "answer": "{{ answer }} "},
+        "card": {"question": "🇵🇹 --> 🇬🇧<br> {{ question }}", "answer": "{{ answer }} "},
     },
 }
 
@@ -45,24 +29,24 @@
         """,
     "preview": "🇬🇧 {{ question }} -> 🇵🇹 {{ answer }}",
     "cards": {
-        "card": {"question": "🇬🇧 {{ question }}", "answer": "{{ answer }} "},
+        "card": {"question": "🇬🇧 --> 🇵🇹<br> {{ question }}", "answer": "{{ answer }} "},
     },
 }
 
 {
-    "name": "PT 🇵🇹 to IT 🇮🇹 with reverse",
-    "description": "Generates two cards: 🇵🇹 -> 🇮🇹 and 🇮🇹 -> 🇵🇹 ",
+    "name": "PT 🇵🇹 to EN 🇬🇧 with reverse",
+    "description": "Generates two cards: 🇵🇹 -> 🇬🇧 and 🇬🇧 -> 🇵🇹 ",
     "form": """
-                <label for='question'>PT 🇵🇹</label>
-                <input type='text' name='question' value='{{ question }}'>
+            <label for='question'>PT 🇵🇹</label>
+            <input type='text' name='question' value='{{ question }}'>
 
-                <label for='answer'>IT 🇮🇹</label>
-                <input type='text' name='answer'  value='{{ answer }}'>
+            <label for='answer'>EN 🇬🇧</label>
+            <input type='text' name='answer'  value='{{ answer }}'>
     """,
-    "preview": "🇵🇹 {{ question }} <->  🇮🇹 {{ answer }}",
+    "preview": "🇵🇹 {{ question }} <-> 🇬🇧 {{ answer }}",
     "cards": {
-        "direct": {"question": "🇵🇹 {{ question }}", "answer": "{{ answer }} "},
-        "reverse": {"question": "🇮🇹 {{ answer }}", "answer": "{{ question }}"},
+        "direct": {"question": "🇵🇹 --> 🇬🇧<br> {{ question }}", "answer": "{{ answer }} "},
+        "reverse": {"question": "🇬🇧 --> 🇵🇹<br> {{ answer }}", "answer": "{{ question }}"},
     },
 }
 
@@ -78,7 +62,7 @@
         """,
     "preview": "🇵🇹 {{ question }} <->  🇮🇹 {{ answer }}",
     "cards": {
-        "card": {"question": "🇵🇹 {{ question }}", "answer": "{{ answer }} "},
+        "card": {"question": "🇵🇹 --> 🇮🇹<br> {{ question }}", "answer": "{{ answer }} "},
     },
 }
 
@@ -94,6 +78,23 @@
     """,
     "preview": "🇮🇹 {{ question }} <-> 🇵🇹 {{ answer }}",
     "cards": {
-        "card": {"question": "🇮🇹 {{ question }}", "answer": "{{ answer }} "},
+        "card": {"question": "🇮🇹 --> 🇵🇹<br>{{ question }}", "answer": "{{ answer }} "},
+    },
+}
+
+{
+    "name": "PT 🇵🇹 to IT 🇮🇹 with reverse",
+    "description": "Generates two cards: 🇵🇹 -> 🇮🇹 and 🇮🇹 -> 🇵🇹 ",
+    "form": """
+                <label for='question'>PT 🇵🇹</label>
+                <input type='text' name='question' value='{{ question }}'>
+
+                <label for='answer'>IT 🇮🇹</label>
+                <input type='text' name='answer'  value='{{ answer }}'>
+    """,
+    "preview": "🇵🇹 {{ question }} <->  🇮🇹 {{ answer }}",
+    "cards": {
+        "direct": {"question": "🇵🇹 --> 🇮🇹<br>{{ question }}", "answer": "{{ answer }} "},
+        "reverse": {"question": "🇮🇹 --> 🇵🇹<br>{{ answer }}", "answer": "{{ question }}"},
     },
 }

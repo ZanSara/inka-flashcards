@@ -36,8 +36,8 @@
     """,
     "preview": "🇵🇹 {{ pt_inf }} / 🇬🇧 {{ eng_inf }}",
     "cards": {
-        "pt_en": "pt, en = random.choice([(eu, I), (tu, you), (ele, he), (nos, you), (eles, you)]); card = {'question': f'🇵🇹 {pt}', 'answer': f'🇬🇧 {en}'}",
-        "en_pt": "pt, en = random.choice([(eu, I), (tu, you), (ele, he), (nos, you), (eles, you)]); card = {'question': f'🇬🇧 {en}', 'answer': f'🇵🇹 {pt}'}",
+        "pt_en": "pt, en = random.choice([(eu, I), (tu, you), (ele, he), (nos, you), (eles, you)]); card = {'question': f'🇵🇹 --> 🇬🇧<br> {pt}', 'answer': f'{en}'}",
+        "en_pt": "pt, en = random.choice([(eu, I), (tu, you), (ele, he), (nos, you), (eles, you)]); card = {'question': f'🇬🇧 --> 🇵🇹<br> {en}', 'answer': f'{pt}'}",
     },
 }
 
@@ -84,7 +84,7 @@
     """,
     "preview": "🇵🇹 {{ pt_inf }} / 🇮🇹 {{ it_inf }}",
     "cards": {
-        "pt_it": "pt, it = random.choice([(eu, io), (tu_pt, tu_it), (ele, lui), (nos, noi), (eles, loro)]); card = {'question': f'🇵🇹 {pt}', 'answer': f'🇮🇹 {it}'}",
-        "it_pt": "pt, it = random.choice([(eu, io), (tu_pt, tu_it), (ele, lui), (nos, noi), (eles, loro)]); card = {'question': f'🇮🇹 {it}', 'answer': f'🇵🇹 {pt}'}",
+        "pt_it": "pt, it = random.choice([(eu, io), (tu_pt, tu_it), (ele, lui), (nos, noi), (eles, loro)]); card = {'question': f'🇵🇹 --> 🇮🇹<br>{pt}', 'answer': f'{it}'}",
+        "it_pt": "pt, it = random.choice([(eu, io), (tu_pt, tu_it), (ele, lui), (nos, noi), (eles, loro)]); card = {'question': f'🇮🇹 --> 🇵🇹<br>{it}', 'answer': f'{pt}'}",
     },
 }
