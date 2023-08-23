@@ -24,7 +24,9 @@ async def get_deck(deck_id: str):
         if deck_id not in db["decks"]:
             raise HTTPException(status_code=404, detail="Deck not found")
         deck = db["decks"][deck_id]
-    return {key: value for key, value in deck.items() if key != "cards"}
+        if "cards" in deck:
+            deck["num_cards"] = len(deck.get("cards", {}))
+        return {key: value for key, value in deck.items() if key != "cards"}
 
 
 @router.post("/decks/import", response_class=JSONResponse)

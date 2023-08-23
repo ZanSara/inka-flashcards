@@ -102,6 +102,7 @@ async def edit_deck_page(deck_id: str, render=Depends(template("private/deck.htm
     response.raise_for_status()
     deck = response.json()
 
+    print(deck)
     return render(
         navbar_title=deck["name"], deck=deck, deck_id=deck_id, algorithms=algorithms
     )
@@ -144,7 +145,7 @@ async def deck_confirm_delete_component(
     deck = response.json()
     return render(
         title="Deleting deck",
-        content=f"Are you really sure you wanna delete the deck '{deck['name']}'? It contains {len(deck['cards'])} cards.",
+        content=f"Are you really sure you wanna delete the deck '{deck['name']}'? It contains {deck['num_cards']} cards.",
         positive=f"Yes, delete {deck['name']}",
         negative="No, don't delete",
         delete_endpoint="delete_deck_endpoint",
