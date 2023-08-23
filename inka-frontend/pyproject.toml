@@ -30,6 +30,7 @@ dependencies = [
     "uvicorn[standard]",
     "jinja2",
     "python-multipart",
+    "requests",
 ]
 
 [project.urls]

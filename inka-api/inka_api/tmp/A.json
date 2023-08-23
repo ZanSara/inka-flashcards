@@ -1,0 +1,27 @@
+{
+    "cards": {
+        "0b2a70c0-1d8e-41d8-9f9a-f3be67d3c419": {
+            "reviews": {
+                "card": 10
+            },
+            "schema": "9315e608416721867e8178210e76be80",
+            "question": "A",
+            "answer": "B",
+            "tags": []
+        },
+        "85226ea9-b06a-4e1c-bbdb-d39fe6c30f5d": {
+            "reviews": {
+                "direct": 8,
+                "reverse": 4
+            },
+            "schema": "eada082bee9286524bb8b6a8c0d82ed9",
+            "question": "C",
+            "answer": "D",
+            "tags": []
+        }
+    },
+    "name": "A",
+    "description": "aaaaaaaa",
+    "tags": [],
+    "algorithm": "HardestFirst"
+}

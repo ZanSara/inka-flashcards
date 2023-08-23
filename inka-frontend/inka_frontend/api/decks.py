@@ -5,7 +5,7 @@ from typing import Optional
 
 import requests
 from fastapi import APIRouter, Depends, HTTPException, Request, UploadFile
-from fastapi.responses import FileResponse, HTMLResponse, RedirectResponse
+from fastapi.responses import FileResponse, HTMLResponse, RedirectResponse, Response
 from fastapi.templating import Jinja2Templates
 from starlette import status
 
@@ -83,10 +83,13 @@ async def import_deck_endpoint(file: UploadFile):
 
 
 @router.get("/decks/{deck_id}/export", response_class=FileResponse)
-async def export_deck_endpoint(request: Request):
-    return requests.get(
-        f"{API_SERVER_URL}/decks/export/{request.path_params['deck_id']}"
+async def export_deck_endpoint(request: Request, deck_id: str):
+    response = requests.get(
+        f"{API_SERVER_URL}/decks/{deck_id}/export"
     )
+    deck = response.json()
+    print(response.json())
+    return FileResponse(json.dumps(deck, indent=4), media_type="application/octet-stream", filename=f"{deck['name']}.json")
 
 
 @router.get("/decks/{deck_id}", response_class=HTMLResponse)

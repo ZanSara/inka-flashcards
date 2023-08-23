@@ -50,9 +50,10 @@ async def import_deck(file: UploadFile):
 
 
 @router.get("/decks/{deck_id}/export", response_class=FileResponse)
-async def export_deck(request: Request):
+async def export_deck(request: Request, deck_id: str):
     with shelve.open(database) as db:
-        deck = deepcopy(db["decks"].get(request.path_params["deck_id"], {}))
+        decks = db["decks"]
+        deck = deepcopy(decks.get(deck_id, {}))
         if not deck:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
         deck["cards"] = {
