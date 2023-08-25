@@ -2,6 +2,8 @@ import importlib.metadata
 from datetime import datetime
 from pathlib import Path
 from typing import Any
+import base64
+
 
 import requests
 from fastapi import Depends, FastAPI, Request
@@ -25,6 +27,7 @@ def get_jinja2():
     env = Environment(loader=PackageLoader("inka_frontend"), autoescape=True)
     env.globals["url_for"] = url_for
     env.globals["this_year"] = datetime.utcnow().year  # noqa: DTZ003
+    env.filters['b64encode'] = base64.b64encode
 
     return env
 
