@@ -27,13 +27,6 @@ def get_jinja2():
     env = Environment(loader=PackageLoader("inka_frontend"), autoescape=True)
     env.globals["url_for"] = url_for
     env.globals["this_year"] = datetime.utcnow().year  # noqa: DTZ003
-    env.globals['b64encode'] = lambda string: base64.b64encode(string.encode()).decode()
-    env.globals['b64decode'] = lambda string:  base64.b64decode(string).decode()
-    env.globals["audio_player"] = lambda url, elem_id="audio": f"""
-    <audio id='{elem_id}' src='{url}'></audio>
-    <i onclick="document.getElementById('{elem_id}').play()" class="fas fa-volume-up" style='margin-left:1rem;'></i>
-    """
-
     return env
 
 

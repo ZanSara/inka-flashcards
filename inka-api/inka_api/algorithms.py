@@ -1,17 +1,25 @@
 import random
 from abc import ABC, abstractmethod
 from typing import Dict
+import base64
 
-from jinja2 import Template, Environment
+from jinja2 import Template
 
 from inka_api.api.utils import get_question_answer_from_schema
-from inka_frontend.app import get_jinja2
 
-import base64
+
+helpers = {
+    "b64encode": lambda string: base64.b64encode(string.encode()).decode(),
+    "b64decode": lambda string:  base64.b64decode(string).decode(),
+    "audio_player": lambda url, elem_id="audio": f"""
+        <audio id='{elem_id}' src='{url}'></audio>
+        <i onclick="document.getElementById('{elem_id}').play()" class="fas fa-volume-up" style='margin-left:1rem;'></i>
+    """
+}
 
 
 def render_card(card_schema, card_data):
-    return Template(card_schema).render(**card_data, **get_jinja2().globals)
+    return Template(card_schema).render(**card_data, **helpers)
 
 
 class Algorithm(ABC):
