@@ -40,8 +40,8 @@ class Random(Algorithm):
         card_id, card_data = random.choice(list(deck["cards"].items()))
         card_schema = schemas[card_data["schema"]]
         card_type, card = random.choice(list(card_schema["cards"].items()))
-        question = render_card(card["question"], card_data) #Template(card["question"]).render(**card_data)
-        answer = render_card(card["answer"], card_data) #Template(card["answer"]).render(**card_data)
+        question = render_card(card["question"], card_data)
+        answer = render_card(card["answer"], card_data)
         return card_id, card_type, question, answer
 
     def process_result(self, deck, card_id, card_type, result):
@@ -88,8 +88,8 @@ class HardestFirst(Algorithm):
             card_schema, deck["cards"][card_id]
         )
 
-        question = Template(question_template).render(**deck["cards"][card_id])
-        answer = Template(answer_template).render(**deck["cards"][card_id])
+        question = render_card(question_template, deck["cards"][card_id])
+        answer = render_card(answer_template, deck["cards"][card_id])
         return card_id, card_type, question, answer
 
     def process_result(self, deck, card_id, card_type, result):
