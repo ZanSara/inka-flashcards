@@ -2,8 +2,16 @@ import random
 from abc import ABC, abstractmethod
 from typing import Dict
 
+from jinja2 import Template, Environment
+
 from inka_api.api.utils import get_question_answer_from_schema
-from jinja2 import Template
+from inka_frontend.app import get_jinja2
+
+import base64
+
+
+def render_card(card_schema, card_data):
+    return Template(card_schema).render(**card_data, **get_jinja2().globals)
 
 
 class Algorithm(ABC):
@@ -32,8 +40,8 @@ class Random(Algorithm):
         card_id, card_data = random.choice(list(deck["cards"].items()))
         card_schema = schemas[card_data["schema"]]
         card_type, card = random.choice(list(card_schema["cards"].items()))
-        question = Template(card["question"]).render(**card_data)
-        answer = Template(card["answer"]).render(**card_data)
+        question = render_card(card["question"], card_data) #Template(card["question"]).render(**card_data)
+        answer = render_card(card["answer"], card_data) #Template(card["answer"]).render(**card_data)
         return card_id, card_type, question, answer
 
     def process_result(self, deck, card_id, card_type, result):
