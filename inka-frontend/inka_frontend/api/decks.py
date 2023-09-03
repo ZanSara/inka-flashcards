@@ -82,14 +82,9 @@ async def import_deck_endpoint(file: UploadFile):
     )
 
 
-@router.get("/decks/{deck_id}/export", response_class=FileResponse)
+@router.get("/decks/{deck_id}/export", response_class=RedirectResponse)
 async def export_deck_endpoint(request: Request, deck_id: str):
-    response = requests.get(
-        f"{API_SERVER_URL}/decks/{deck_id}/export"
-    )
-    deck = response.json()
-    print(response.json())
-    return FileResponse(json.dumps(deck, indent=4), media_type="application/octet-stream", filename=f"{deck['name']}.json")
+    return RedirectResponse(f"{API_SERVER_URL}/decks/{deck_id}/export")
 
 
 @router.get("/decks/{deck_id}", response_class=HTMLResponse)
