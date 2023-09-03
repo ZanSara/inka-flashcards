@@ -18,17 +18,20 @@
         " method="post">
         <div class="box main-card">
             <div>
+
+                <input class="h1" type="text" name="name", placeholder="Name" value="{{ schema.name }}"></input>
+                <input type="text" name="description" placeholder="Description" value="{{ schema.description }}"></input>
+
+                <label for="form">Form:</label>
+                <textarea name="form" rows="10">{{ schema.form }}</textarea>
+
+                <label for="preview">Preview:</label>
+                <textarea name="preview" rows="2">{{ schema.preview }}</textarea>
+
+                <label for="cards">Cards:</label>
+                <textarea name="cards" rows="5">{{ schema.cards }}</textarea>
+
                 {% if editing_existing %}<h3>EDITING SCHEMAS MIGHT BREAK YOUR DECKS</h3>{% endif %}
-                <p>Always use """ for multiline strings.</p>
-                <textarea name="code" rows="20">{
-{% for key, value in schema.items() -%}
-    "{{ key }}": {% if value is not mapping %} "{{ value|string|indent(4) }}", {% else%} {
-        {% for k1, v1 in value.items() -%}
-        '{{ k1 }}': {{ v1|string }},
-        {% endfor -%}
-    },{% endif%}
-{% endfor -%}
-}</textarea>
                 <div class="buttons" style="margin-top: 1rem;">
                     <button type="submit" class="positive">Save</button>
                     <a href="{% if old_schema_id %}

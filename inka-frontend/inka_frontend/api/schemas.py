@@ -116,7 +116,13 @@ async def clone_schema_page(
 @router.post("/schemas/", response_class=RedirectResponse)
 async def create_schema_endpoint(request: Request):
     async with request.form() as form:
-        schema = eval(form["code"])  # noqa: S307
+        schema = {
+            "name": form["name"],
+            "description": form["description"],
+            "form": form["form"],
+            "preview": form["preview"],
+            "cards": eval(form["cards"])  # noqa: S307
+        }
         schema_id = md5(schema["name"].encode()).hexdigest()
         response = requests.post(f"{API_SERVER_URL}/schemas/{schema_id}", json=schema)
         response.raise_for_status()
@@ -129,7 +135,13 @@ async def create_schema_endpoint(request: Request):
 async def update_schema_endpoint(request: Request, schema_id: str):
     async with request.form() as form:
         try:
-            schema = eval(form["code"])  # noqa: S307
+            schema = {
+            "name": form["name"],
+            "description": form["description"],
+            "form": form["form"],
+            "preview": form["preview"],
+            "cards": eval(form["cards"])  # noqa: S307
+        }
         except Exception as exc:
             raise HTTPException(500, f"Syntax error in schema code: {exc}") from exc
         response = requests.post(f"{API_SERVER_URL}/schemas/{schema_id}", json=schema)
