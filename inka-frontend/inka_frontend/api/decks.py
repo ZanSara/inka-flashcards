@@ -66,15 +66,21 @@ async def import_deck_page(render=Depends(template("private/import.html"))):
 async def import_deck_endpoint(file: UploadFile):
     try:
         contents = await file.read()
-        deck = json.loads(contents)
+        deck = json.loads(contents.decode())
         response = requests.post(f"{API_SERVER_URL}/decks/import", json=deck)
         response.raise_for_status()
 
     except Exception as err:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="There was an error importing the deck",
-        ) from err
+        if hasattr(err, "response"):
+            raise HTTPException(
+                status_code=err.response.status_code,
+                detail=json.loads(err.response._content.decode())["detail"],
+            ) from err
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="There was an error importing this deck."
+            ) from err
     finally:
         await file.close()
     return RedirectResponse(
@@ -84,7 +90,15 @@ async def import_deck_endpoint(file: UploadFile):
 
 @router.get("/decks/{deck_id}/export", response_class=RedirectResponse)
 async def export_deck_endpoint(request: Request, deck_id: str):
-    return RedirectResponse(f"{API_SERVER_URL}/decks/{deck_id}/export")
+    response = requests.get(f"{API_SERVER_URL}/decks/{deck_id}/export")
+    deck = response.json()
+    print(deck)
+    path = Path(__file__).parent.parent / f"tmp/{deck['name']}.json"
+    with open(path, "w") as file:
+        json.dump(deck, file, indent=4)
+    return FileResponse(
+        path, media_type="application/octet-stream", filename=f"{deck['name']}.json"
+    )
 
 
 @router.get("/decks/{deck_id}", response_class=HTMLResponse)

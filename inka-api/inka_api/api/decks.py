@@ -30,28 +30,19 @@ async def get_deck(deck_id: str):
 
 
 @router.post("/decks/import", response_class=JSONResponse)
-async def import_deck(file: UploadFile):
-    try:
-        contents = await file.read()
-        deck = json.loads(contents)
-        with shelve.open(database) as db:
-            deck_id = md5(deck["name"].encode()).hexdigest()
-            if deck_id in db["decks"]:
-                raise HTTPException(
-                    status_code=409, detail="Deck with this name already exists"
-                )
-            db["decks"][deck_id] = deck
-    except Exception as err:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="There was an error importing the deck",
-        ) from err
-    finally:
-        await file.close()
+async def import_deck(request: Request):
+    deck = await request.json()
+    with shelve.open(database) as db:
+        deck_id = md5(deck["name"].encode()).hexdigest()
+        if deck_id in db["decks"]:
+            raise HTTPException(
+                status_code=409, detail="Deck with this name already exists"
+            )
+        db["decks"][deck_id] = deck
     return {"deck_id": deck_id}
 
 
-@router.get("/decks/{deck_id}/export", response_class=FileResponse)
+@router.get("/decks/{deck_id}/export", response_class=JSONResponse)
 async def export_deck(request: Request, deck_id: str):
     with shelve.open(database) as db:
         decks = db["decks"]
@@ -61,12 +52,7 @@ async def export_deck(request: Request, deck_id: str):
         deck["cards"] = {
             card_id: dict(card.items()) for card_id, card in deck["cards"].items()
         }
-        path = Path(__file__).parent.parent / f"tmp/{deck['name']}.json"
-        with open(path, "w") as file:
-            json.dump(deck, file, indent=4)
-    return FileResponse(
-        path, media_type="application/octet-stream", filename=f"{deck['name']}.json"
-    )
+        return deck
 
 
 @router.post("/decks/new", response_class=JSONResponse)
@@ -91,14 +77,17 @@ async def create_deck(request: Request):
 @router.post("/decks/{deck_id}", response_class=JSONResponse)
 async def save_deck(request: Request, deck_id: str):
     form = await request.json()
+    new_deck_id = md5(form["name"].encode()).hexdigest()
     with shelve.open(database) as db:
-        db["decks"][deck_id] = {
+        db["decks"][new_deck_id] = {
             **db["decks"].get(deck_id, {"cards": {}}),
             "name": form["name"],
             "description": form["description"],
             "tags": [tag.strip() for tag in form["tags"].split(",") if tag.strip()],
             "algorithm": form["algorithm"],
         }
+        if new_deck_id != deck_id:
+            del db["decks"][deck_id]
     return {"deck_id": deck_id}
 
 
