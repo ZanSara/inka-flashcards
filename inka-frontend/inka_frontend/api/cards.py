@@ -45,9 +45,13 @@ async def cards_component(
     response.raise_for_status()
     schemas = response.json()
 
+    response = requests.get(f"{API_SERVER_URL}/functions")
+    response.raise_for_status()
+    functions = response.json()
+
     for card in cards.values():
         card["schema_name"] = schemas[card["schema"]]["name"]
-        card["preview"] = Template(schemas[card["schema"]]["preview"]).render(**card)
+        card["preview"] = Template(schemas[card["schema"]]["preview"]).render(**card, **{name: eval(func) for name, func in functions.items()})
 
     return render(cards=cards, deck_id=deck_id)
 

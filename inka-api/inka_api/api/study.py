@@ -18,7 +18,7 @@ async def get_card_to_study(deck_id: str):
             return {"card_id": None, "deck_id": deck_id}
 
         algorithm = ALGORITHMS[deck["algorithm"]]
-        card_id, card_type, question, answer = algorithm.next_card(deck, db["schemas"])
+        card_id, card_type, question, answer = algorithm.next_card(deck, db["schemas"], {name: exec(func) for name, func in db["functions"]})
         buttons = algorithm.buttons()
 
     return {

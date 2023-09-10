@@ -4,6 +4,8 @@
 {% block css%}
 <link href="/static/css/deck-details.css" rel="stylesheet">
 <link href="/static/css/modal.css" rel="stylesheet">
+<link rel="stylesheet" data-name="vs/editor/editor.main" href="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.26.1/min/vs/editor/editor.main.min.css">
+
 {% endblock %}
 
 
@@ -23,13 +25,70 @@
                 <input type="text" name="description" placeholder="Description" value="{{ schema.description }}"></input>
 
                 <label for="form">Form:</label>
-                <textarea name="form" rows="10">{{ schema.form }}</textarea>
+                <textarea id="form" name="form" class="hidden">{{ schema.form }}</textarea>
+                <script type="module">
+                    import * as monaco from 'https://cdn.jsdelivr.net/npm/monaco-editor@0.39.0/+esm';
+                  
+                    var editor = monaco.editor.create(document.querySelector('#monaco-form'), {
+                        value:`{{ schema.form|safe }}`,
+                        language:"html",
+                        theme:"vs-dark",
+                        readOnly:false,
+                        minimap:{enabled:false},
+                        overviewRulerLanes: 0,
+                        wordWrap: 'off',
+                    });
+                    editor.onKeyUp(() => {
+                        document.querySelector('#form').textContent = editor.getValue();
+                        console.log(document.querySelector('#form').textContent);
+                    });
+                  </script>
+                  <div id="monaco-form" style="min-height: 150px"></div>
+
 
                 <label for="preview">Preview:</label>
-                <textarea name="preview" rows="2">{{ schema.preview }}</textarea>
+                <textarea id="preview" name="preview" class="hidden">{{ schema.preview }}</textarea>
+                <script type="module">
+                    import * as monaco from 'https://cdn.jsdelivr.net/npm/monaco-editor@0.39.0/+esm';
+                  
+                    var editor = monaco.editor.create(document.querySelector('#monaco-preview'), {
+                        value:`{{ schema.preview|safe }}`,
+                        language:"html",
+                        theme:"vs-dark",
+                        readOnly:false,
+                        minimap:{enabled:false},
+                        overviewRulerLanes: 0,
+                        wordWrap: 'off',
+                    });
+                    editor.onKeyUp(() => {
+                        document.querySelector('#preview').textContent = editor.getValue();
+                        console.log(document.querySelector('#preview').textContent);
+                    });
+                  </script>
+                  <div id="monaco-preview" style="min-height: 100px"></div>
+
 
                 <label for="cards">Cards:</label>
-                <textarea name="cards" rows="5">{{ schema.cards }}</textarea>
+                <textarea id="cards" name="cards" class="hidden">{{ schema.cards }}</textarea>
+                <script type="module">
+                    import * as monaco from 'https://cdn.jsdelivr.net/npm/monaco-editor@0.39.0/+esm';
+                  
+                    var editor = monaco.editor.create(document.querySelector('#monaco-cards'), {
+                        value:`{{ schema.cards|safe }}`,
+                        language:"html",
+                        theme:"vs-dark",
+                        readOnly:false,
+                        minimap:{enabled:false},
+                        overviewRulerLanes: 0,
+                        wordWrap: 'off',
+                    });
+                    editor.onKeyUp(() => {
+                        document.querySelector('#cards').textContent = editor.getValue();
+                        console.log(document.querySelector('#cards').textContent);
+                    });
+                  </script>
+                  <div id="monaco-cards" style="min-height: 150px"></div>
+
 
                 {% if editing_existing %}<h3>EDITING SCHEMAS MIGHT BREAK YOUR DECKS</h3>{% endif %}
                 <div class="buttons" style="margin-top: 1rem;">

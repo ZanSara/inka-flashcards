@@ -1,25 +1,14 @@
 import random
 from abc import ABC, abstractmethod
 from typing import Dict
-import base64
 
 from jinja2 import Template
 
 from inka_api.api.utils import get_question_answer_from_schema
 
 
-helpers = {
-    "b64encode": lambda string: base64.b64encode(string.encode()).decode(),
-    "b64decode": lambda string:  base64.b64decode(string).decode(),
-    "audio_player": lambda url, elem_id="audio": f"""
-        <audio id='{elem_id}' src='{url}'></audio>
-        <i onclick="document.getElementById('{elem_id}').play()" class="fas fa-volume-up" style='margin-left:1rem;'></i>
-    """
-}
-
-
-def render_card(card_schema, card_data):
-    return Template(card_schema).render(**card_data, **helpers)
+def render_card(card_schema, card_data, functions):
+    return Template(card_schema).render(**card_data, **functions)
 
 
 class Algorithm(ABC):
@@ -44,12 +33,14 @@ class Random(Algorithm):
     No review data is kept.
     """
 
-    def next_card(self, deck, schemas):
+    def next_card(self, deck, schemas, functions):
+        print(functions)
+
         card_id, card_data = random.choice(list(deck["cards"].items()))
         card_schema = schemas[card_data["schema"]]
         card_type, card = random.choice(list(card_schema["cards"].items()))
-        question = render_card(card["question"], card_data)
-        answer = render_card(card["answer"], card_data)
+        question = render_card(card["question"], card_data, functions)
+        answer = render_card(card["answer"], card_data, functions)
         return card_id, card_type, question, answer
 
     def process_result(self, deck, card_id, card_type, result):
@@ -69,7 +60,7 @@ class HardestFirst(Algorithm):
             "wrong": "var(--danger)",
         }
 
-    def next_card(self, deck, schemas, from_minimum=3):
+    def next_card(self, deck, schemas, functions, from_minimum=3):
         """
         from_minimum: how many values above the minimum are still considered
             when selecting the cards to pick from.
@@ -96,8 +87,8 @@ class HardestFirst(Algorithm):
             card_schema, deck["cards"][card_id]
         )
 
-        question = render_card(question_template, deck["cards"][card_id])
-        answer = render_card(answer_template, deck["cards"][card_id])
+        question = render_card(question_template, deck["cards"][card_id], functions)
+        answer = render_card(answer_template, deck["cards"][card_id], functions)
         return card_id, card_type, question, answer
 
     def process_result(self, deck, card_id, card_type, result):
