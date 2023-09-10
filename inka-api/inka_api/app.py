@@ -5,6 +5,7 @@ from pathlib import Path
 from textwrap import dedent
 from hashlib import md5
 from contextlib import asynccontextmanager
+from textwrap import dedent
 import base64
 
 from fastapi import FastAPI
@@ -20,12 +21,6 @@ shelve.open = partial(shelve.open, writeback=True)
 async def lifespan(app: FastAPI):
     with shelve.open(database) as db:
         db.setdefault("decks", {})
-        db.setdefault(
-            "functions", {
-                "b64encode": "import base64; lambda string: base64.b64encode(string.encode()).decode()",
-                "b64decode": "import base64; lambda string: base64.b64decode(string).decode()"
-            }
-        )
         db.setdefault(
             "schemas",
             {
@@ -92,11 +87,9 @@ from inka_api.api.decks import router as decks_router  # noqa: E402
 from inka_api.api.cards import router as cards_router  # noqa: E402
 from inka_api.api.algorithms import router as algorithms_router  # noqa: E402
 from inka_api.api.schemas import router as schemas_router  # noqa: E402
-from inka_api.api.functions import router as functions_router  # noqa: E402
 
 app.include_router(study_router)
 app.include_router(decks_router)
 app.include_router(cards_router)
 app.include_router(algorithms_router)
 app.include_router(schemas_router)
-app.include_router(functions_router)
